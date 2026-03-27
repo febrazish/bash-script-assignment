@@ -9,6 +9,11 @@ echo "BAM file:" $bamfile
 outputfolder=$2 
 echo "Output folder:" $outputfolder
 
+# Creating another output directory
+mkdir $outputfolder"/output"
+outputdir="$outputfolder""/output"
+echo "Output directory:" $outputdir
+
 # Conda
 source $(dirname $(dirname $(which conda)))/etc/profile.d/conda.sh
 # Creating and activating conda environment called 'bam2bed' with the bedtools package
