@@ -21,7 +21,6 @@ source $(dirname $(dirname $(which conda)))/etc/profile.d/conda.sh
 conda create -y -n bam2bed bedtools
 conda activate bam2bed
 
-
 # Converting input BAM file to a BED file with bedtools
 # and saving it in output directory
 filename=$(basename ${bamfile} .bam)
@@ -33,7 +32,8 @@ echo "BED filename:" "$outputfolder/$filename.bed"
 
 # Filtering the BED file with regex for all regions from chromosome 1
 # and saving those in another BED file with the suffix _chr1.bed
-grep -i "chr1" "$outputfolder/$filename.bed" > "$outputfolder/$filename""_chr1.bed"
+# and the -w flag to make sure it doesn't include chr10
+grep -i -w "chr1" "$outputfolder/$filename.bed" > "$outputfolder/$filename""_chr1.bed"
 echo "Chromosome 1 BED filename:" "$outputfolder/$filename""_chr1.bed"
 
 # Counting the number of lines in the filtered file and storing the count in
