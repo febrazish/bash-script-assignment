@@ -9,10 +9,11 @@ echo "BAM file:" $bamfile
 outputfolder=$2 
 echo "Output folder:" $outputfolder
 
-# Creating another output directory
-mkdir $outputfolder"/output"
-outputdir="$outputfolder""/output"
-echo "Output directory:" $outputdir
+# Creating the output directory if it doesn't exist yet
+# (I adapted this code from the similar line in the test_the_script.sh file)
+if [ ! -d $2 ]; then
+  mkdir $outputfolder
+fi
 
 # Conda
 source $(dirname $(dirname $(which conda)))/etc/profile.d/conda.sh
