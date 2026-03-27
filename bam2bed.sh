@@ -9,34 +9,30 @@ echo "BAM file:" $bamfile
 outputfolder=$2 
 echo "Output folder:" $outputfolder
 
-# Creating a new output directory
-mkdir $outputfolder"/output"
-outputdir="$outputfolder""/output"
-echo "Output directory:" $outputdir
-
 # Conda
 source $(dirname $(dirname $(which conda)))/etc/profile.d/conda.sh
-# Creating and activating conda environment with the name 'bam2bed'
-conda create --name bam2bed
+# Creating and activating conda environment called 'bam2bed' with the bedtools package
+conda create -y -n bam2bed bedtools
 conda activate bam2bed
 
-# Converting input BAM file to a BED file with bedtools, removing .bam
-# extension and giving it .bed extension, then saving it in output directory
+
+# Converting input BAM file to a BED file with bedtools
+# and saving it in output directory
 filename=$(basename ${bamfile} .bam)
+echo $filename
+bedtools bamtobed -i $bamfile > "$outputfolder/$filename.bed"
+echo "BED filename:" "$outputfolder/$filename.bed"
 
-bedtools bamtobed -i $bamfile > "$outputdir/$filename.bed"
-echo "BED filename:" "$outputdir/$filename.bed"
-
-echo "BED file line count:" $(wc -l "$outputdir/$filename.bed")
+ echo "BED line count:" $(wc -l "$outputfolder/$filename.bed")
 
 # Filtering the BED file with regex for all regions from chromosome 1
 # and saving those in another BED file with the suffix _chr1.bed
-grep -i "chr1" "$outputdir/$filename.bed" > "$outputdir/$filename""_chr1.bed"
-echo "Chromosome 1 BED filename:" "$outputdir/$filename""_chr1.bed"
+grep -i "chr1" "$outputfolder/$filename.bed" > "$outputfolder/$filename""_chr1.bed"
+echo "Chromosome 1 BED filename:" "$outputfolder/$filename""_chr1.bed"
 
 # Counting the number of lines in the filtered file and storing the count in
 # a new file called bam2bed_number_of_rows.txt
-wc -l "$outputdir/$filename""_chr1.bed" > $outputdir"/bam2bed_number_of_rows.txt"
-echo "Linecount filename:" $outputdir"/bam2bed_number_of_rows.txt"
+wc -l "$outputfolder/$filename""_chr1.bed" > $outputfolder"/bam2bed_number_of_rows.txt"
+echo "Count file:" $outputfolder"/bam2bed_number_of_rows.txt"
 
 echo Alex
